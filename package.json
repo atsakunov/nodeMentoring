@@ -1,0 +1,25 @@
+{
+  "name": "nodeMentoring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "task1": "nodemon task1.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atsakunov/nodeMentoring.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atsakunov/nodeMentoring/issues"
+  },
+  "homepage": "https://github.com/atsakunov/nodeMentoring#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  }
+}
