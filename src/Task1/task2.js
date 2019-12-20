@@ -7,7 +7,7 @@ import {
 import {
     INPUT_PATH,
     OUTPUT_PATH
-} from './constants';
+} from '../constants';
 
 const errorHandling = (err) => {
     if (err) {
