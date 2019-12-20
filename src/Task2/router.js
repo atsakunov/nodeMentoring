@@ -48,11 +48,17 @@ router.route('/user/:id')
     })
     .delete((req, res) => {
         const id = req.params.id;
-        if (storage.removeItem(id)) {
-            res.status(200).send('Item was removed');
-        } else {
-            res.status(500).send('Failed');
+        const data = storage.removeItem(id);
+        if (!data.id) {
+            res.status(404).send({
+                ...data,
+                message: `user with id ${id} not found`
+            })
         }
+        res.status(200).send({
+            ...data,
+            message: `user with id ${id} was deleted`
+        });
     })
     .put((req, res) => {
         const id = req.params.id;
@@ -69,8 +75,15 @@ router.route('/user/:id')
         if (validation.error) {
             res.status(400).send(validation.error);
         }
-        storage.updateUser(id, login, password, age);
-        res.send('User was successfuly updated');
+        const updatedItem = storage.updateUser(id, login, password, age);
+        if (!updatedItem.id) {
+            res.status(404).send({
+                message: `user with id ${id} not found`
+            })
+        }
+        res.status(404).send({
+            message: `user with id ${id} was successfuly updated`
+        })
     });
 
 router.get('/suggest/', (req, res) => {

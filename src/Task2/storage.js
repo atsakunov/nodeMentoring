@@ -82,12 +82,11 @@ const getItemById = (id) => {
 
 const removeItem = (id) => {
     const item = data.find(item => item.id === id);
-    let isSuccess = false;
-    if (item) {
-        item.isDeleted = true;
-        isSuccess = true;
+    if (!item.id) {
+        return {}
     }
-    return isSuccess;
+    item.isDeleted = true;
+    return item;
 }
 
 const createUser = (login, password, age) => {
