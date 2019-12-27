@@ -24,7 +24,7 @@ router.route('/user/')
             age
         })
         if (validation.error) {
-            res.status(400).send(validation.error);
+             return res.status(400).send(validation.error); 
         }
         storage.createUser(login, password, age);
         res.status(200).send('User was successfuly created');
@@ -36,7 +36,7 @@ router.route('/user/:id')
         const id = req.params.id;
         const data = storage.getItemById(id);
         if (!data.id) {
-            res.status(404).send({
+             return res.status(404).send({
                 ...data,
                 message: `user with id ${id} not found`
             })
@@ -50,7 +50,7 @@ router.route('/user/:id')
         const id = req.params.id;
         const data = storage.removeItem(id);
         if (!data.id) {
-            res.status(404).send({
+            return res.status(404).send({
                 ...data,
                 message: `user with id ${id} not found`
             })
@@ -73,17 +73,18 @@ router.route('/user/:id')
             age
         })
         if (validation.error) {
-            res.status(400).send(validation.error);
+            return res.status(400).send(validation.error);
         }
         const updatedItem = storage.updateUser(id, login, password, age);
         if (!updatedItem.id) {
-            res.status(404).send({
+            return res.status(404).send({
                 message: `user with id ${id} not found`
             })
-        }
-        res.status(404).send({
+        } 
+        res.status(200).send({
             message: `user with id ${id} was successfuly updated`
         })
+        
     });
 
 router.get('/suggest/', (req, res) => {
