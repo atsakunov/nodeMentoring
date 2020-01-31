@@ -4,5 +4,5 @@
 
 # production
 /build
-
-/src/data.txt
+.env
+/config/config.json
