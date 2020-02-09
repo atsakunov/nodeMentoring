@@ -2,25 +2,23 @@ import {
   Router
 } from 'express';
 import {
-  userSchema
-} from '../utils/validators';
+  GroupService
+} from '../services/groupService';
 import {
-  UserService
-} from '../services/userService';
+  groupSchema
+} from '../utils/validators';
 
+const groupRouter = Router();
 
-const User = new UserService();
+const Group = new GroupService();
 
-const userRouter = Router();
-
-userRouter.route('/user/')
+groupRouter.route('/group/')
   .get(async (req, res) => {
     try {
-      const users = await User.getAll();
-      res.json({
-        users
-      });
+      const groups = await Group.getAll();
+      res.json(groups);
     } catch (error) {
+      console.log(error)
       res.status(500).json({
         message: 'Server Error'
       });
@@ -28,23 +26,21 @@ userRouter.route('/user/')
   })
   .post(async (req, res) => {
     const {
-      login,
-      password,
-      age
+      name,
+      permission,
     } = req.body;
-    const validation = userSchema.validate({
-      login,
-      password,
-      age
+    const validation = groupSchema.validate({
+      name,
+      permission,
     })
     if (validation.error) {
       return res.status(400).send(validation.error);
     }
     try {
-      const user = await User.createUser(login, password, age);
+      const group = await Group.createGroup(name, permission);
       res.status(201).json({
-        message: 'User was successfuly created',
-        userId: user.id
+        message: 'Group was successfuly created',
+        groupId: group.id
       });
     } catch (error) {
       res.status(500).json({
@@ -53,19 +49,18 @@ userRouter.route('/user/')
     }
   });
 
-
-userRouter.route('/user/:id')
+groupRouter.route('/group/:id')
   .get(async (req, res) => {
     try {
       const id = req.params.id;
-      const user = await User.findById(id);
-      if (!user) {
+      const group = await Group.findById(id);
+      if (!group) {
         return res.status(404).send({
-          message: `user with id ${id} not found`
+          message: `group with id ${id} not found`
         })
       }
       res.status(200).json({
-        userId: user.id,
+        group,
         message: `Success`
       });
     } catch (error) {
@@ -77,9 +72,15 @@ userRouter.route('/user/:id')
   .delete(async (req, res) => {
     try {
       const id = req.params.id;
-      await User.deleteUser(id);
+      const group = await Group.deleteGroup(id);
+      if (!group) {
+        return res.status(404).send({
+          message: `group with id ${id} not found`
+        })
+      }
       res.status(200).json({
-        message: `user with id ${id} was deleted`
+        group,
+        message: `group with id ${id} successfuly deleted`
       });
     } catch (error) {
       res.status(500).json({
@@ -91,21 +92,24 @@ userRouter.route('/user/:id')
     try {
       const id = req.params.id;
       const {
-        login,
-        password,
-        age
+        name,
+        permission,
       } = req.body;
-      const validation = userSchema.validate({
-        login,
-        password,
-        age
+      const validation = groupSchema.validate({
+        name,
+        permission,
       })
       if (validation.error) {
         return res.status(400).send(validation.error);
       }
-      const user = await User.updateUser(id, login, password, age);
+      const group = await Group.updateGroup(id, name, permission);
+      if (!group) {
+        return res.status(404).send({
+          message: `group with id ${id} not found`
+        })
+      }
       res.status(200).json({
-        user,
+        group,
         message: `user with id ${id} was successfuly updated`
       })
     } catch (error) {
@@ -116,5 +120,5 @@ userRouter.route('/user/:id')
   });
 
 export {
-  userRouter
+  groupRouter
 }
