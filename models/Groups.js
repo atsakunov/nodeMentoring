@@ -4,12 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     permission: DataTypes.ARRAY(DataTypes.STRING)
   });
   Group.associate = function (models) {
-    // models.Group.belongsToMany(models.Product, {
-    //   through: 'UserGroups',
-    //   as: 'users',
-    //   foreignKey: 'groupId',
-    //   otherKey: 'userId'
-    // });
+    models.Groups.belongsToMany(models.Groups, {
+      through: models.UserGroup,
+      as: 'user',
+      foreignKey: 'groupId',
+      otherKey: 'userId'
+    });
   };
   return Group;
 };

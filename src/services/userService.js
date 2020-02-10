@@ -23,8 +23,8 @@ export class UserService {
       }
     });
   }
-  deleteUser(id) {
-    return db.User.update({
+  async deleteUser(id) {
+    await db.User.update({
       isDeleted: true
     }, {
       where: {
@@ -32,6 +32,7 @@ export class UserService {
       }
     });
   }
+
   updateUser(id, login, password, age) {
     return db.User.update({
       login,

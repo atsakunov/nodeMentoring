@@ -11,13 +11,24 @@ const UserGroup = new UserGroupService();
 const userGroupRouter = Router();
 
 userGroupRouter.route('/usergroup/')
+  .get(async (req, res) => {
+    try {
+      const userGroups = await UserGroup.getAll();
+      res.json({
+        userGroups
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Server Error'
+      });
+    }
+  })
   .post(async (req, res) => {
     const {
       userId,
       groupId
     } = req.body;
     try {
-
       const userGroup = await UserGroup.addUsersToGroup(userId, groupId);
       if (!userGroup) {
         return res.status(404).send({
@@ -29,7 +40,6 @@ userGroupRouter.route('/usergroup/')
         ...userGroup
       });
     } catch (error) {
-      console.log(error)
       res.status(500).json({
         message: 'Server Error'
       });

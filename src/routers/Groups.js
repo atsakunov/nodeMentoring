@@ -7,10 +7,14 @@ import {
 import {
   groupSchema
 } from '../utils/validators';
+import {
+  GroupController
+} from '../controllers/groupController'
 
 const groupRouter = Router();
 
 const Group = new GroupService();
+const GroupCtrl = new GroupController();
 
 groupRouter.route('/group/')
   .get(async (req, res) => {
@@ -18,7 +22,6 @@ groupRouter.route('/group/')
       const groups = await Group.getAll();
       res.json(groups);
     } catch (error) {
-      console.log(error)
       res.status(500).json({
         message: 'Server Error'
       });
@@ -72,7 +75,7 @@ groupRouter.route('/group/:id')
   .delete(async (req, res) => {
     try {
       const id = req.params.id;
-      const group = await Group.deleteGroup(id);
+      const group = await GroupCtrl.deleteGroup(id);
       if (!group) {
         return res.status(404).send({
           message: `group with id ${id} not found`

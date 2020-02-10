@@ -6,11 +6,11 @@ const UserModel = (sequelize, DataTypes) => {
     isDeleted: DataTypes.BOOLEAN
   });
   User.associate = function (models) {
-    // User.belongsToMany(models.Group, {
-    //   through: 'UserGroups',
-    //   as: 'groups',
-    //   foreignKey: 'userId',
-    // });
+    User.belongsToMany(models.Groups, {
+      through: models.UserGroup,
+      as: 'groups',
+      foreignKey: 'userId',
+    });
   };
   return User;
 };

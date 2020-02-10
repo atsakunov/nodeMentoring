@@ -50,19 +50,10 @@ export class GroupService {
   }
 
   async deleteGroup(id) {
-    const group = await db.Groups.findOne({
-      where: {
-        id
-      }
-    });
-    if (!group) {
-      return null;
-    }
-    this.Group.destroy({
+    return await db.Groups.destroy({
       where: {
         id
       }
     })
-    return group;
   }
 }

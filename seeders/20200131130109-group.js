@@ -11,7 +11,25 @@ module.exports = {
         permission: ['Read', 'UPLOAD_FILES'],
         createdAt: new Date(),
         updatedAt: new Date(),
-      }
+      },
+      {
+        name: 'User2',
+        permission: ['Read', 'UPLOAD_FILES'],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: 'User3',
+        permission: ['Read', 'UPLOAD_FILES'],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: 'User4',
+        permission: ['Read', 'UPLOAD_FILES'],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ], {});
   },
 

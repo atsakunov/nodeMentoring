@@ -7,9 +7,13 @@ import {
 import {
   UserService
 } from '../services/userService';
+import {
+  UserController
+} from '../controllers/userController';
 
 
 const User = new UserService();
+const UserCtrl = new UserController();
 
 const userRouter = Router();
 
@@ -65,7 +69,7 @@ userRouter.route('/user/:id')
         })
       }
       res.status(200).json({
-        userId: user.id,
+        userId: user,
         message: `Success`
       });
     } catch (error) {
@@ -77,7 +81,13 @@ userRouter.route('/user/:id')
   .delete(async (req, res) => {
     try {
       const id = req.params.id;
-      await User.deleteUser(id);
+      const user = UserCtrl.deleteUser(id);
+
+      if (!user) {
+        return res.status(404).send({
+          message: `user with id ${id} not found`
+        })
+      }
       res.status(200).json({
         message: `user with id ${id} was deleted`
       });
