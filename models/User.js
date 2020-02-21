@@ -4,9 +4,13 @@ const UserModel = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     age: DataTypes.INTEGER,
     isDeleted: DataTypes.BOOLEAN
-  }, {});
+  });
   User.associate = function (models) {
-    // associations can be defined here
+    User.belongsToMany(models.Groups, {
+      through: models.UserGroup,
+      as: 'groups',
+      foreignKey: 'userId',
+    });
   };
   return User;
 };

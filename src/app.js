@@ -1,7 +1,9 @@
 import express from 'express';
 import {
-  router as userRouter
-} from './routers/User';
+  userRouter,
+  groupRouter,
+  userGroupRouter
+} from './routers/';
 import {
   config
 } from 'dotenv';
@@ -29,6 +31,8 @@ app.use((err, req, res, next) => {
 });
 
 app.use('/api', userRouter);
+app.use('/api', groupRouter);
+app.use('/api', userGroupRouter);
 
 
 app.listen(PORT, async () => {
@@ -37,6 +41,7 @@ app.listen(PORT, async () => {
     await db.sequelize.sync();
     console.log('Successfull database connection');
   } catch (error) {
+    console.log(error)
     console.log('Error database connection');
   }
 });

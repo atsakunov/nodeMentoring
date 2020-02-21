@@ -4,17 +4,12 @@ import {
 
 
 export class UserService {
-
-  constructor() {
-    this.User = db.User;
-  }
-
-  getAll() {
-    return this.User.findAll();
+  async getAll() {
+    return db.User.findAll();
   }
 
   createUser(login, password, age) {
-    return this.User.create({
+    return db.User.create({
       login,
       password,
       age,
@@ -22,14 +17,14 @@ export class UserService {
     });
   }
   findById(id) {
-    return this.User.findOne({
+    return db.User.findOne({
       where: {
         id
       }
     });
   }
-  deleteUser(id) {
-    return this.User.update({
+  async deleteUser(id) {
+    await db.User.update({
       isDeleted: true
     }, {
       where: {
@@ -37,8 +32,9 @@ export class UserService {
       }
     });
   }
+
   updateUser(id, login, password, age) {
-    return this.User.update({
+    return db.User.update({
       login,
       password,
       age
