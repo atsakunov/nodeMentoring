@@ -2,22 +2,27 @@ import {
   Router
 } from 'express';
 import {
-  UserGroupService
-} from '../services/userGroupService';
+  UserGroupController
+} from '../controllers/userGroupController';
+import logger from '../utils/logger';
 
-
-const UserGroup = new UserGroupService();
+const UserGroupCtrl = new UserGroupController();
 
 const userGroupRouter = Router();
 
 userGroupRouter.route('/usergroup/')
   .get(async (req, res) => {
     try {
-      const userGroups = await UserGroup.getAll();
+      const userGroups = await UserGroupCtrl.getAllUsers();
       res.json({
         userGroups
       });
     } catch (error) {
+      logger.log({
+        level: 'error',
+        url: req.originalUrl,
+        error
+      })
       res.status(500).json({
         message: 'Server Error'
       });
@@ -29,7 +34,7 @@ userGroupRouter.route('/usergroup/')
       groupId
     } = req.body;
     try {
-      const userGroup = await UserGroup.addUsersToGroup(userId, groupId);
+      const userGroup = await UserGroupCtrl.addUsersToGroup(userId, groupId);
       if (!userGroup) {
         return res.status(404).send({
           message: `user or group not found`
@@ -40,6 +45,11 @@ userGroupRouter.route('/usergroup/')
         ...userGroup
       });
     } catch (error) {
+      logger.log({
+        level: 'error',
+        url: req.originalUrl,
+        error
+      })
       res.status(500).json({
         message: 'Server Error'
       });

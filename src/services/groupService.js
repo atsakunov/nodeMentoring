@@ -1,9 +1,14 @@
 import {
   db
 } from '../../models';
+import logger from '../utils/logger';
 
 export class GroupService {
   getAll() {
+    logger.log({
+      level: 'info',
+      serviceMethod: 'getAll',
+    })
     return db.Groups.findAll({
       order: [
         ['id', 'ASC'],
@@ -13,6 +18,11 @@ export class GroupService {
   }
 
   findById(id) {
+    logger.log({
+      level: 'info',
+      serviceMethod: 'findById',
+      arguments: [id]
+    })
     return db.Groups.findOne({
       where: {
         id
@@ -21,6 +31,11 @@ export class GroupService {
   }
 
   createGroup(name, permission) {
+    logger.log({
+      level: 'info',
+      serviceMethod: 'createGroup',
+      arguments: [name, permission]
+    })
     return db.Groups.create({
       name,
       permission,
@@ -28,16 +43,11 @@ export class GroupService {
   }
 
   async updateGroup(id, name, permission) {
-    const group = await db.Groups.findOne({
-      where: {
-        id
-      }
-    });
-
-
-    if (!group) {
-      return null;
-    }
+    logger.log({
+      level: 'info',
+      serviceMethod: 'updateGroup',
+      arguments: [id, name, permission]
+    })
     this.Group.update({
       name,
       permission,
@@ -50,6 +60,11 @@ export class GroupService {
   }
 
   async deleteGroup(id) {
+    logger.log({
+      level: 'info',
+      serviceMethod: 'deleteGroup',
+      arguments: [id]
+    })
     return await db.Groups.destroy({
       where: {
         id

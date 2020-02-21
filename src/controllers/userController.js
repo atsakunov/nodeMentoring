@@ -17,4 +17,20 @@ export class UserController {
     await User.deleteUser(id);
     await UserGroup.deleteByUserId(id);
   }
+  async getAllUsers() {
+    const users = await User.getAll();
+    return users;
+  }
+  async createUser(login, password, age) {
+    const user = await User.createUser(login, password, age);
+    return user;
+  }
+  async getUserById(id) {
+    const user = await User.findById(id);
+    return user;
+  }
+  async updateUser(id, login, password, age) {
+    const user = await User.updateUser(id, login, password, age);
+    return user;
+  }
 }

@@ -2,26 +2,28 @@ import {
   Router
 } from 'express';
 import {
-  GroupService
-} from '../services/groupService';
-import {
   groupSchema
 } from '../utils/validators';
 import {
   GroupController
-} from '../controllers/groupController'
+} from '../controllers/groupController';
+import logger from '../utils/logger';
 
 const groupRouter = Router();
 
-const Group = new GroupService();
 const GroupCtrl = new GroupController();
 
 groupRouter.route('/group/')
   .get(async (req, res) => {
     try {
-      const groups = await Group.getAll();
+      const groups = await GroupCtrl.getAllGroup();
       res.json(groups);
     } catch (error) {
+      logger.log({
+        level: 'error',
+        url: req.originalUrl,
+        error
+      })
       res.status(500).json({
         message: 'Server Error'
       });
@@ -37,15 +39,29 @@ groupRouter.route('/group/')
       permission,
     })
     if (validation.error) {
+      logger.log({
+        level: 'error',
+        url: req.originalUrl,
+        error: validation.error,
+        params: {
+          name,
+          permission
+        }
+      })
       return res.status(400).send(validation.error);
     }
     try {
-      const group = await Group.createGroup(name, permission);
+      const group = await GroupCtrl.createGroup(name, permission);
       res.status(201).json({
         message: 'Group was successfuly created',
         groupId: group.id
       });
     } catch (error) {
+      logger.log({
+        level: 'error',
+        url: req.originalUrl,
+        error
+      })
       res.status(500).json({
         message: 'Server Error'
       });
@@ -56,7 +72,7 @@ groupRouter.route('/group/:id')
   .get(async (req, res) => {
     try {
       const id = req.params.id;
-      const group = await Group.findById(id);
+      const group = await GroupCtrl.getGroupById(id);
       if (!group) {
         return res.status(404).send({
           message: `group with id ${id} not found`
@@ -67,6 +83,11 @@ groupRouter.route('/group/:id')
         message: `Success`
       });
     } catch (error) {
+      logger.log({
+        level: 'error',
+        url: req.originalUrl,
+        error
+      })
       res.status(500).json({
         message: 'Server Error'
       });
@@ -86,6 +107,11 @@ groupRouter.route('/group/:id')
         message: `group with id ${id} successfuly deleted`
       });
     } catch (error) {
+      logger.log({
+        level: 'error',
+        url: req.originalUrl,
+        error
+      })
       res.status(500).json({
         message: 'Server Error'
       });
@@ -103,9 +129,18 @@ groupRouter.route('/group/:id')
         permission,
       })
       if (validation.error) {
+        logger.log({
+          level: 'error',
+          url: req.originalUrl,
+          error: validation.error,
+          params: {
+            name,
+            permission
+          }
+        })
         return res.status(400).send(validation.error);
       }
-      const group = await Group.updateGroup(id, name, permission);
+      const group = await GroupCtrl.updateGroup(id, name, permission);
       if (!group) {
         return res.status(404).send({
           message: `group with id ${id} not found`
@@ -116,6 +151,11 @@ groupRouter.route('/group/:id')
         message: `user with id ${id} was successfuly updated`
       })
     } catch (error) {
+      logger.log({
+        level: 'error',
+        url: req.originalUrl,
+        error
+      })
       res.status(500).json({
         message: 'Server Error'
       });
