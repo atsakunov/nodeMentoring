@@ -1,29 +1,25 @@
 import {
   db
 } from '../../models';
+import logger from '../utils/logger';
 
 export class UserGroupService {
 
   async getAll() {
+    logger.log({
+      level: 'info',
+      serviceMethod: 'getAll',
+    })
     return db.UserGroup.findAll();
   }
 
   async addUsersToGroup(userId, groupId) {
+    logger.log({
+      level: 'info',
+      serviceMethod: 'addUsersToGroup',
+      arguments: [userId, groupId]
+    })
     const t = await db.sequelize.transaction();
-    const user = await db.User.findOne({
-      where: {
-        id: userId
-      }
-    });
-    const group = await db.Groups.findOne({
-      where: {
-        id: groupId
-      }
-    });
-
-    if (!user || !group) {
-      return null
-    }
 
     try {
       await db.UserGroup.create({
@@ -37,12 +33,17 @@ export class UserGroupService {
       await t.rollback();
     }
     return {
-      user,
-      group
+      userId,
+      groupId
     }
   }
 
   async deleteByUserId(id) {
+    logger.log({
+      level: 'info',
+      serviceMethod: 'deleteByUserId',
+      arguments: [id]
+    })
     await db.UserGroup.destroy({
       where: {
         userId: id
