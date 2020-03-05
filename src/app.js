@@ -13,7 +13,7 @@ import {
   db
 } from '../models';
 import logger from './utils/logger';
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 config();
 
