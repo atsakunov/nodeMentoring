@@ -2,15 +2,18 @@ import express from 'express';
 import {
   userRouter,
   groupRouter,
-  userGroupRouter
+  userGroupRouter,
+  authRouter
 } from './routers/';
 import {
   config
 } from 'dotenv';
+import cors from 'cors';
 import {
   db
 } from '../models';
 import logger from './utils/logger';
+import jwt from 'jsonwebtoken';
 
 config();
 
@@ -35,13 +38,31 @@ process
     process.exit(1);
   });
 
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));
 
+app.use((req, res, next) => {
+  const token = req.headers['x-user-token'];
 
-
+  if (!token) {
+    return res.status(401).send({
+      code: 403,
+      message: 'Unauthorized Error'
+    });
+  }
+  try {
+    jwt.verify(token, process.env.jwtSecret);
+  } catch (error) {
+    return res.status(403).send({
+      code: 403,
+      message: 'Forbiden'
+    });
+  }
+  next();
+})
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
@@ -70,7 +91,7 @@ app.use((req, res, next) => {
 app.use('/api', userRouter);
 app.use('/api', groupRouter);
 app.use('/api', userGroupRouter);
-
+app.use('/api', authRouter);
 
 app.listen(PORT, async () => {
   try {

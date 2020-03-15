@@ -3,7 +3,6 @@ import {
 } from '../../models';
 import logger from '../utils/logger';
 
-
 export class UserService {
   async getAll() {
     logger.log({
@@ -38,13 +37,25 @@ export class UserService {
       }
     });
   }
-  async deleteUser(id) {
+  async findBylogin(login) {
+    logger.log({
+      level: 'info',
+      serviceMethod: 'findBylogin',
+      arguments: [login]
+    })
+    return db.User.findOne({
+      where: {
+        login
+      }
+    });
+  }
+  deleteUser(id) {
     logger.log({
       level: 'info',
       serviceMethod: 'deleteUser',
       arguments: [id]
     })
-    await db.User.update({
+    db.User.update({
       isDeleted: true
     }, {
       where: {
