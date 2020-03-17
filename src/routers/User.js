@@ -7,10 +7,13 @@ import {
 import {
   UserController
 } from '../controllers/userController';
+import {
+  UserService
+} from '../services/userService';
 import logger from '../utils/logger';
 
-
-const UserCtrl = new UserController();
+const User = new UserService();
+const UserCtrl = new UserController(User);
 
 const userRouter = Router();
 

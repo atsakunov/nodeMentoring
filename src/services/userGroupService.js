@@ -51,3 +51,5 @@ export class UserGroupService {
     })
   }
 }
+
+export default UserGroupService;
