@@ -48,6 +48,9 @@ app.use((req, res, next) => {
   const token = req.headers['x-user-token'];
 
   if (!token) {
+    if (req.originalUrl === '/api/login') {
+      return next();
+    }
     return res.status(401).send({
       code: 403,
       message: 'Unauthorized Error'
